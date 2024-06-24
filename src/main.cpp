@@ -38,5 +38,5 @@ void loop() {
     Serial.println(SD.usedBytes());
     Serial.println(SD.totalBytes());
     Serial.println("");
-    delay(5000);
+    delay(4000);
 }
