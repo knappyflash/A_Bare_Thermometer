@@ -1,39 +1,75 @@
-// #include <Arduino.h>
-// #include <SD.h>
-// #include <SPI.h>
-// #include <FS.h>
-// #include <FFat.h>
+#include "FS.h"
+#include "SD.h"
+#include "SPI.h"
 
-// #include <MyWifi.cpp>
+class MySDcard{
 
-// #define SD_CS 5
+    public:
 
-// void setup() {
-//     Serial.begin(115200);
+        void Start(){
+  
+            if(!SD.begin()){
+                Serial.println("Card Mount Failed");
+                return;
+            }
+            uint8_t cardType = SD.cardType();
 
-//     delay(5000);
+            if(cardType == CARD_NONE){
+                Serial.println("No SD card attached");
+                return;
+            }
 
-//     if (!SD.begin(SD_CS)) {
-//         Serial.println("Card Mount Failed");
-//         return;
-//     }
-//     uint8_t cardType = SD.cardType();
-//     if (cardType == CARD_NONE) {
-//         Serial.println("No SD card attached");
-//         return;
-//     }
-//     Serial.println("SD Card Type: ");
-//     if (cardType == CARD_MMC) {
-//         Serial.println("MMC");
-//     } else if (cardType == CARD_SD) {
-//         Serial.println("SDSC");
-//     } else if (cardType == CARD_SDHC) {
-//         Serial.println("SDHC");
-//     } else {
-//         Serial.println("UNKNOWN");
-//     }
-// }
+            Serial.print("SD Card Type: ");
+            if(cardType == CARD_MMC){
+                Serial.println("MMC");
+            } else if(cardType == CARD_SD){
+                Serial.println("SDSC");
+            } else if(cardType == CARD_SDHC){
+                Serial.println("SDHC");
+            } else {
+                Serial.println("UNKNOWN");
+            }
 
-// void loop() {
-//     // put your main code here, to run repeatedly:
-// }
+            uint64_t cardSize = SD.cardSize() / (1024 * 1024);
+            Serial.printf("SD Card Size: %lluMB\n", cardSize);
+
+            uint64_t usedSpace = SD.usedBytes() / (1024 * 1024);
+            Serial.printf("Used Space: %lluMB\n", usedSpace);
+
+            uint64_t freeSpace = SD.totalBytes() / (1024 * 1024);
+            Serial.printf("Total Space: %lluMB\n", freeSpace);
+
+        }
+
+        void listDir(fs::FS &fs, const char * dirname, uint8_t levels){
+            Serial.printf("Listing directory: %s\n", dirname);
+
+            File root = fs.open(dirname);
+            if(!root){
+                Serial.println("Failed to open directory");
+                return;
+            }
+            if(!root.isDirectory()){
+                Serial.println("Not a directory");
+                return;
+            }
+
+            File file = root.openNextFile();
+            while(file){
+                if(file.isDirectory()){
+                    Serial.print("  DIR : ");
+                    Serial.println(file.name());
+                    if(levels){
+                        listDir(fs, file.name(), levels -1);
+                    }
+                } else {
+                    Serial.print("  FILE: ");
+                    Serial.print(file.name());
+                    Serial.print("  SIZE: ");
+                    Serial.println(file.size());
+                }
+                file = root.openNextFile();
+            }
+        }
+
+};
