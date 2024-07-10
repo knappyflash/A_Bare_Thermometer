@@ -67,6 +67,7 @@ class MyThermometer{
             return pClient->isConnected();
         }
 
+        // This is showing 0 + 32 sometimes maybe set to neg -1000 then if no value keep orginal value
         int Get_Temperature(){
             int MyValue = 0;
             static BLEUUID SeriveUUID(Service_Environmental_UUID);
@@ -77,6 +78,13 @@ class MyThermometer{
                 std::string valueRaw = pRemoteCharacteristic->readValue();
                 double ValueConverted = (valueRaw[1] << 8) | valueRaw[0];
                 MyValue = round((((ValueConverted / 100) * 1.8) + 32));
+                // if (MyValue == 0){
+                //     Serial.print("Hay Look At This!!!! ----- Temp: ");
+                //     Serial.println(MyValue);
+                // }
+                // Serial.print("Temp: ");
+                // Serial.println(MyValue);
+                // Serial.println(Get_isConnected());
             }
             return MyValue;
         }
@@ -91,6 +99,8 @@ class MyThermometer{
                 std::string valueRaw = pRemoteCharacteristic->readValue();
                 double ValueConverted = (valueRaw[1] << 8) | valueRaw[0];
                 MyValue = (round(ValueConverted / 100));
+                // Serial.print ("Humidity: ");
+                // Serial.println(MyValue);
             }
             return MyValue;
         }
@@ -104,6 +114,8 @@ class MyThermometer{
             if(pRemoteCharacteristic->canRead()) {
                 std::string valueRaw = pRemoteCharacteristic->readValue();
                 MyValue = (uint8_t)valueRaw[0];
+                // Serial.print("Batt: ");
+                // Serial.println(MyValue);
             }
             return MyValue;
         }
