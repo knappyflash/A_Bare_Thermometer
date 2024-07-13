@@ -168,7 +168,7 @@ class MyDisplay{
             tft.drawString(String(Msg_Line3),0, 140);
         }
 
-        void Draw_Creepe_Face(){
+        void Draw_Creeper_Face(){
             uint32_t  Green1 = tft.color565(143,227,143);
             uint32_t  Green2 = tft.color565(15,128,15);
             uint32_t  Green3 = tft.color565(13,181,13);
