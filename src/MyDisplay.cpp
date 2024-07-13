@@ -168,4 +168,73 @@ class MyDisplay{
             tft.drawString(String(Msg_Line3),0, 140);
         }
 
+        void Draw_Creepe_Face(){
+            uint32_t  Green1 = tft.color565(143,227,143);
+            uint32_t  Green2 = tft.color565(15,128,15);
+            uint32_t  Green3 = tft.color565(13,181,13);
+            uint32_t  Green4 = tft.color565(96,158,96);
+            uint32_t  Green5 = tft.color565(0,100,0);
+
+            uint32_t CreeperColors[] = {Green1,Green2,Green3,Green4,Green5};
+            
+            int Top = 0;
+            int Left = 15;
+            int BlockWidth = 30;
+            for(int y = 0; y <= 7; y++) {
+                for(int x = 1; x <= 8; x++) {
+                    tft.fillRect((x * BlockWidth) + Left, (y * BlockWidth) + Top, BlockWidth, BlockWidth, CreeperColors[random(0,5)]);
+                }
+            }
+            // Eyes
+            tft.fillRect((2 * BlockWidth) + Left, (2 * BlockWidth) + Top, 2 * BlockWidth, 2 * BlockWidth, tft.color565(0,0,0));
+            tft.fillRect((6 * BlockWidth) + Left, (2 * BlockWidth) + Top, 2 * BlockWidth, 2 * BlockWidth, tft.color565(0,0,0));
+            // Mouth
+            tft.fillRect((4 * BlockWidth) + Left, (4 * BlockWidth) + Top, 2 * BlockWidth, 3 * BlockWidth, tft.color565(0,0,0));
+            tft.fillRect((3 * BlockWidth) + Left, (5 * BlockWidth) + Top, 1 * BlockWidth, 3 * BlockWidth, tft.color565(0,0,0));
+            tft.fillRect((6 * BlockWidth) + Left, (5 * BlockWidth) + Top, 1 * BlockWidth, 3 * BlockWidth, tft.color565(0,0,0));
+        }
+
+        void Draw_Jeb(){
+            int Top = 150;
+            int Left = 150;
+            int Size = 150;
+
+            int OrangeLeft = 0;
+            int Orangetop = 130;
+
+            int HairLeft = 80;
+            int HarTop = 60;
+
+            // Helmet
+            tft.fillCircle(Left, Top, Size, tft.color565(0,0,0));
+            tft.fillCircle(Left, Top, Size * 0.95, tft.color565(255,255,255));
+            tft.fillCircle(Left, Top, Size * 0.80, tft.color565(76,76,76));
+
+            // OrangeParts
+            tft.fillRect(OrangeLeft, Orangetop, 40, 60, tft.color565(234,95,4));
+            tft.fillRect(OrangeLeft + 260, Orangetop, 40, 60, tft.color565(234,95,4));
+            tft.fillRect(OrangeLeft + 130, Orangetop - 130, 60, 40, tft.color565(234,95,4));
+
+            // Head
+            tft.fillRoundRect(Left-70, Top - 90, 150, 200, 10, tft.color565(152,194,112));
+            
+            // Face
+            // Eyes
+            tft.fillRoundRect(Left - 80, Top, 60, 50, 10, tft.color565(255,255,255));
+            tft.fillRoundRect(Left + 30, Top, 60, 50, 10, tft.color565(255,255,255));
+            tft.fillRoundRect(Left - 60, Top + 18, 10, 10, 10, tft.color565(0,0,0));
+            tft.fillRoundRect(Left + 50, Top + 18, 10, 10, 10, tft.color565(0,0,0));
+
+            // Hair
+            tft.fillRoundRect(HairLeft - 5, HarTop - 5, 165, 40, 10, tft.color565(0,0,0));
+            tft.fillRoundRect(HairLeft - 5, HarTop - 5, 20, 75, 10, tft.color565(0,0,0));
+            tft.fillRoundRect(HairLeft + 145, HarTop - 5, 20, 75, 10, tft.color565(0,0,0));
+            tft.fillRoundRect(HairLeft + 50, HarTop - 5, 70, 55, 10, tft.color565(0,0,0));
+
+            // Mouth
+            tft.fillRoundRect(HairLeft + 10, Top + 70, 130, 10, 10, tft.color565(75,102,51));
+
+
+        }
+
 };
