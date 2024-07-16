@@ -17,6 +17,8 @@ int Humty2 = 0;
 int Battery1 = 0;
 int Battery2 = 0;
 
+int SizeOfSplashArray = sizeof(SplashArrayForJosh) / sizeof(SplashArrayForJosh[0]);
+
 // For Timers
 unsigned long currentMillis = millis();
 unsigned long previousMillis1000 = 0;
@@ -27,22 +29,21 @@ const long interval1000 = 1000; // 1 seconds
 const long interval30000 = 30000; // 30 seconds
 const long interval60000 = 60000; // 1 minutes
 const long interval600000 = 600000; // 10 minutes
-void Function_Interval_1_Seconds() {
+void Function_Interval_1_Seconds() {    
 }
 void Function_Interval_30_Seconds() {
 }
 void Function_Interval_1_Minute() {
 
-    int ImgChoice = random(1,3);
-    switch (ImgChoice) {
-        case 1:
-            MyDisplay1.Draw_Creepe_Face();
-            break;
-        case 2:
-            MyDisplay1.Draw_Jeb();
-            break;
-        delay(3000);
-    }
+    int RndImgNum = random(1,45);
+    std::string RndImgNumStr = std::to_string(RndImgNum);
+    const char* RndImgNumChrPtr = RndImgNumStr.c_str();
+
+    std::string path = "/img_" + std::string(RndImgNumChrPtr) + ".csv";
+    MyDisplay1.Draw_CSV(path.c_str());
+
+    delay(3000);
+    MyDisplay1.Draw_CSV("/BG_IMG.csv");
 
     if (!MyThermometer1.Get_isConnected()){
         MyThermometer1.Connect("a4:c1:38:65:97:23");
@@ -64,7 +65,7 @@ void Function_Interval_1_Minute() {
     }
 
     if (MyThermometer1.Get_isConnected() && MyThermometer2.Get_isConnected()){
-        MyDisplay1.Do_A_Loop(Temp1, Temp2, Humty1, Humty2, Battery1, Battery2,SplashArrayForJosh[random(0,559)]);
+        MyDisplay1.Do_A_Loop(Temp1, Temp2, Humty1, Humty2, Battery1, Battery2,SplashArrayForJosh[random(0, SizeOfSplashArray)]);
     }else{
         MyDisplay1.Do_A_Loop(-1, -1, -1, -1, -1, -1,"Hi Josh. Nothing To See Here...");
     }
@@ -82,6 +83,8 @@ void Function_Interval_10_Minute() {
 void setup() {
 
     Serial.begin(115200);
+
+    MyDisplay1.List_All_Files();
 
     MyThermometer1.MyInit();
     MyThermometer2.MyInit();

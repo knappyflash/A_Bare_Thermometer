@@ -4,6 +4,8 @@
 #include <TFT_eSPI.h>
 #include <SPI.h>
 #include <XPT2046_Touchscreen.h>
+#include <SD.h>
+#include <SPI.h>
 
 /*
 Cheap Yellow Display (CYD) (ESP32-2432S028R) 320 x 240 2.8 LCD
@@ -18,25 +20,53 @@ class MyDisplay{
         int TxtBG_G = 26;
         int TxtBG_B = 26;
 
-    public:
-
         TFT_eSPI tft = TFT_eSPI();
+
+        void printDirectory(File dir, int numTabs) {
+            while (true) {
+                File entry =  dir.openNextFile();
+                if (! entry) {
+                // no more files
+                break;
+                }
+                for (uint8_t i=0; i<numTabs; i++) {
+                Serial.print('\t');
+                }
+                Serial.print(entry.name());
+                if (entry.isDirectory()) {
+                Serial.println("/");
+                printDirectory(entry, numTabs+1);
+                } else {
+                // files have sizes, directories do not
+                Serial.print("\t\t");
+                Serial.println(entry.size(), DEC);
+                }
+                entry.close();
+            }
+        }
+
+    public:
         // TFT_eSprite sprA = TFT_eSprite(&tft);
         // TFT_eSprite sprB = TFT_eSprite(&tft);
         // TFT_eSprite sprC = TFT_eSprite(&tft);
 
         MyDisplay() {
+            if (!SD.begin()) {
+                Serial.println("Card Mount Failed");
+                return;
+            }
         }
 
         void SetUp_Display(){
+
             tft.init();
             tft.setRotation(1);
-            tft.fillScreen(tft.color565(0,0,80));
+            tft.fillScreen(TFT_BLACK);
             tft.setTextColor(tft.color565(0,255,0),tft.color565(TxtBG_R,TxtBG_G,TxtBG_B),true);
             tft.setFreeFont(&FreeSans9pt7b);
             tft.setTextSize(2);
 
-            Screen_Disolve();
+            // Screen_Disolve();
 
             Serial.println("Display Has Been Setup.");
         }
@@ -56,7 +86,7 @@ class MyDisplay{
         // Ran out of ram creating sprites, so I am just going to do one big loop instead
         void Do_A_Loop(int Temp1, int Temp2, int Humidy1, int Humidy2, int Batt1, int Batt2, const char* SplashTxt){
             
-            Screen_Disolve();
+            // Screen_Disolve();
 
             int Col_x = 10;
 
@@ -234,7 +264,44 @@ class MyDisplay{
             // Mouth
             tft.fillRoundRect(HairLeft + 10, Top + 70, 130, 10, 10, tft.color565(75,102,51));
 
+        }
 
+        void Draw_CSV(const char* FileName){
+
+            File file = SD.open(FileName);
+
+            if (!file) {
+                Serial.println("Failed to open file for reading");
+                return;
+            }
+
+            int x = 0;
+            int y = 0;
+            while (file.available()) {
+                String line = file.readStringUntil('\n');
+                int commaIndex = 0, startIndex = 0;
+
+                while ((commaIndex = line.indexOf(',', startIndex)) != -1) {
+                    String value = line.substring(startIndex, commaIndex);
+                    uint32_t numValue = strtoul(value.c_str(), NULL, 10);
+                    tft.fillRect(x,y,4,4,numValue);
+                    startIndex = commaIndex + 1;
+                    x = x + 4;
+                }
+                y = y + 4;
+                x=0;
+            }
+
+            file.close();
+
+        }
+
+        void List_All_Files(){
+            if (!SD.begin()) {
+                Serial.println("Card Mount Failed");
+                return;
+            }
+            printDirectory(SD.open("/"), 0);
         }
 
 };

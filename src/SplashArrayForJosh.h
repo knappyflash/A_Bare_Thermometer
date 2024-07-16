@@ -559,5 +559,20 @@ const char* SplashArrayForJosh[] = {
 "Yeah, put miss him",
 "In the whole wide room",
 "It's business time",
-"Did try turning it off and on again?"
+"Try turning it off and on again",
+"Hello World",
+"kflash.net",
+"I like Redstone!",
+"T-Flip Flop",
+"RS NOR Latch",
+"Do you remember redstone memory?",
+"Python (Named after Monty Python)",
+"C++ after C. C after B",
+"VBA (Visual Basic for Apps)",
+"VB.NET (Visual Basic .NET Framework)",
+"Arduino's are fun",
+"ESP32's are fun",
+"SQL (Structured Query Language)",
+"JSON (JavaScript Object Notation)",
+"JavaScript, HTML, PHP, CSS"
 };
