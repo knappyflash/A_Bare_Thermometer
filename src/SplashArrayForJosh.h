@@ -574,5 +574,7 @@ const char* SplashArrayForJosh[] = {
 "ESP32's are fun",
 "SQL (Structured Query Language)",
 "JSON (JavaScript Object Notation)",
-"JavaScript, HTML, PHP, CSS"
+"JavaScript, HTML, PHP, CSS",
+"Okie dokie now. We havea da keepa!",
+"We takeada hir & we swish it like dis"
 };

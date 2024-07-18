@@ -4,6 +4,7 @@
 #include <MyDisplay.cpp>
 #include <MyThermometer.cpp>
 #include <SplashArrayForJosh.h>
+
 // #include <MyWifi.cpp>
 
 MyDisplay MyDisplay1;
@@ -41,9 +42,7 @@ void Function_Interval_1_Minute() {
 
     std::string path = "/img_" + std::string(RndImgNumChrPtr) + ".csv";
     MyDisplay1.Draw_CSV(path.c_str());
-
-    delay(3000);
-    MyDisplay1.Draw_CSV("/BG_IMG.csv");
+    delay(1000);
 
     if (!MyThermometer1.Get_isConnected()){
         MyThermometer1.Connect("a4:c1:38:65:97:23");
@@ -64,6 +63,7 @@ void Function_Interval_1_Minute() {
         Battery2 = MyThermometer2.Get_BatteryLvl();
     }
 
+    MyDisplay1.Draw_Tiles_16x16("/BG_IMG.csv");
     if (MyThermometer1.Get_isConnected() && MyThermometer2.Get_isConnected()){
         MyDisplay1.Do_A_Loop(Temp1, Temp2, Humty1, Humty2, Battery1, Battery2,SplashArrayForJosh[random(0, SizeOfSplashArray)]);
     }else{
@@ -83,8 +83,6 @@ void Function_Interval_10_Minute() {
 void setup() {
 
     Serial.begin(115200);
-
-    MyDisplay1.List_All_Files();
 
     MyThermometer1.MyInit();
     MyThermometer2.MyInit();

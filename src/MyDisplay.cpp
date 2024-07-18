@@ -5,7 +5,6 @@
 #include <SPI.h>
 #include <XPT2046_Touchscreen.h>
 #include <SD.h>
-#include <SPI.h>
 
 /*
 Cheap Yellow Display (CYD) (ESP32-2432S028R) 320 x 240 2.8 LCD
@@ -19,8 +18,6 @@ class MyDisplay{
         int TxtBG_R = 26;
         int TxtBG_G = 26;
         int TxtBG_B = 26;
-
-        TFT_eSPI tft = TFT_eSPI();
 
         void printDirectory(File dir, int numTabs) {
             while (true) {
@@ -50,14 +47,21 @@ class MyDisplay{
         // TFT_eSprite sprB = TFT_eSprite(&tft);
         // TFT_eSprite sprC = TFT_eSprite(&tft);
 
+        TFT_eSPI tft = TFT_eSPI();
+
+        bool SD_Card_Working = true;
+
         MyDisplay() {
-            if (!SD.begin()) {
-                Serial.println("Card Mount Failed");
-                return;
-            }
+
         }
 
         void SetUp_Display(){
+
+            if (!SD.begin()) {
+                SD_Card_Working = false;
+                Serial.println("Card Mount Failed");
+                // return;
+            }
 
             tft.init();
             tft.setRotation(1);
@@ -188,6 +192,15 @@ class MyDisplay{
             }
         }
 
+        void Draw_Creeper_or_Jeb(){
+            int CoinFlip = random(0,2);
+            if (CoinFlip == 0){
+                Draw_Creeper_Face();
+            }else{
+                Draw_Jeb();
+            }
+        }
+
         void Error_Screen(const char* Msg_Line1, const char* Msg_Line2, const char* Msg_Line3){
             tft.fillScreen(tft.color565(255,0,0));
             tft.textbgcolor = tft.color565(255,255,0);
@@ -266,21 +279,28 @@ class MyDisplay{
 
         }
 
+        // Used Python script to convert 80x60 png files to color values in a csv
+        // Increasing the 80 x 60 by 4 to 320 x 240 to fill the screen
+        // the csv image files are on the sd card in root /
         void Draw_CSV(const char* FileName){
-
-            File file = SD.open(FileName);
-
-            if (!file) {
-                Serial.println("Failed to open file for reading");
+            if (!SD_Card_Working){
+                Serial.println("SD Card Not Working!");
+                Draw_Creeper_or_Jeb();
+                delay(3000);
                 return;
             }
-
+            File file = SD.open(FileName);
+            if (!file) {
+                Serial.println("Failed to open file for reading");
+                Draw_Creeper_or_Jeb();
+                delay(3000);
+                return;
+            }
             int x = 0;
             int y = 0;
             while (file.available()) {
                 String line = file.readStringUntil('\n');
                 int commaIndex = 0, startIndex = 0;
-
                 while ((commaIndex = line.indexOf(',', startIndex)) != -1) {
                     String value = line.substring(startIndex, commaIndex);
                     uint32_t numValue = strtoul(value.c_str(), NULL, 10);
@@ -288,12 +308,47 @@ class MyDisplay{
                     startIndex = commaIndex + 1;
                     x = x + 4;
                 }
+                tft.fillRect(315,y,5,5,TFT_BLACK);
                 y = y + 4;
                 x=0;
             }
-
             file.close();
+        }
 
+        void Draw_Tiles_16x16(const char* FileName){
+            if (!SD_Card_Working){
+                Serial.println("SD Card Not Working!");
+                Screen_Disolve();
+                delay(3000);
+                return;
+            }
+            File file = SD.open(FileName);
+            if (!file) {
+                Serial.println("Failed to open file for reading");
+                Screen_Disolve();
+                delay(3000);
+                return;
+            }
+            int x = 0;
+            int y = 0;
+            while (file.available()) {
+                String line = file.readStringUntil('\n');
+                int commaIndex = 0, startIndex = 0;
+                while ((commaIndex = line.indexOf(',', startIndex)) != -1) {
+                    String value = line.substring(startIndex, commaIndex);
+                    uint32_t numValue = strtoul(value.c_str(), NULL, 10);
+                    for(int MyTileY = 0; MyTileY < 4; MyTileY++) {
+                        for(int MyTileX = 0; MyTileX < 6; MyTileX++) {
+                            tft.fillRect(x + (15 * (4 * MyTileX)),y + (15 * (4 * MyTileY)),4,4,numValue);
+                        }
+                    }
+                    startIndex = commaIndex + 1;
+                    x = x + 4;
+                }
+                y = y + 4;
+                x=0;
+            }
+            file.close();
         }
 
         void List_All_Files(){
