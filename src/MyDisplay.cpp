@@ -250,7 +250,7 @@ class MyDisplay{
             // Helmet
             tft.fillCircle(Left, Top, Size, tft.color565(0,0,0));
             tft.fillCircle(Left, Top, Size * 0.95, tft.color565(255,255,255));
-            tft.fillCircle(Left, Top, Size * 0.80, tft.color565(76,76,76);
+            tft.fillCircle(Left, Top, Size * 0.80, tft.color565(76,76,76));
 
             // OrangeParts
             tft.fillRect(OrangeLeft, Orangetop, 40, 60, tft.color565(234,95,4));
