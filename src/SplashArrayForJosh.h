@@ -576,5 +576,6 @@ const char* SplashArrayForJosh[] = {
 "JSON (JavaScript Object Notation)",
 "JavaScript, HTML, PHP, CSS",
 "Okie dokie now. We havea da keepa!",
-"We takeada hir & we swish it like dis"
+"We takeada hir & we swish it like dis",
+"Hi YouTube XD"
 };

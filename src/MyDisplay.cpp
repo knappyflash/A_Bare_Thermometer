@@ -250,7 +250,7 @@ class MyDisplay{
             // Helmet
             tft.fillCircle(Left, Top, Size, tft.color565(0,0,0));
             tft.fillCircle(Left, Top, Size * 0.95, tft.color565(255,255,255));
-            tft.fillCircle(Left, Top, Size * 0.80, tft.color565(76,76,76));
+            tft.fillCircle(Left, Top, Size * 0.80, tft.color565(76,76,76);
 
             // OrangeParts
             tft.fillRect(OrangeLeft, Orangetop, 40, 60, tft.color565(234,95,4));
@@ -338,7 +338,7 @@ class MyDisplay{
                     uint32_t numValue = strtoul(value.c_str(), NULL, 10);
                     for(int MyTileY = 0; MyTileY < 4; MyTileY++) {
                         for(int MyTileX = 0; MyTileX < 6; MyTileX++) {
-                            tft.fillRect(x + (15 * (4 * MyTileX)),y + (15 * (4 * MyTileY)),4,4,numValue);
+                            tft.fillRect(x + (15 * (4 * MyTileX)),y + (16 * (4 * MyTileY)),4,4,numValue);
                         }
                     }
                     startIndex = commaIndex + 1;

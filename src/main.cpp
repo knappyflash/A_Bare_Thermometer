@@ -75,9 +75,9 @@ void Function_Interval_1_Minute() {
         MyDisplay1.Do_A_Loop(-1, -1, -1, -1, -1, -1,"Hi Josh. Nothing To See Here...");
     }
 
-    Serial.print("Free heap memory: ");
-    Serial.print(ESP.getFreeHeap());
-    Serial.println(" bytes");
+    // Serial.print("Free heap memory: ");
+    // Serial.print(ESP.getFreeHeap());
+    // Serial.println(" bytes");
     
 }
 
