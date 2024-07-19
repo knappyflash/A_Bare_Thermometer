@@ -63,7 +63,12 @@ void Function_Interval_1_Minute() {
         Battery2 = MyThermometer2.Get_BatteryLvl();
     }
 
-    MyDisplay1.Draw_Tiles_16x16("/BG_IMG.csv");
+    int RndImgNum2 = random(0,22);
+    std::string RndImgNumStr2 = std::to_string(RndImgNum2);
+    const char* RndImgNumChrPtr2 = RndImgNumStr2.c_str();
+
+    std::string path2 = "/BG_IMG_" + std::string(RndImgNumChrPtr2) + ".csv";
+    MyDisplay1.Draw_Tiles_16x16(path2.c_str());
     if (MyThermometer1.Get_isConnected() && MyThermometer2.Get_isConnected()){
         MyDisplay1.Do_A_Loop(Temp1, Temp2, Humty1, Humty2, Battery1, Battery2,SplashArrayForJosh[random(0, SizeOfSplashArray)]);
     }else{

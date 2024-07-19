@@ -3,7 +3,6 @@
 #include <ctime>   // for time()
 #include <TFT_eSPI.h>
 #include <SPI.h>
-#include <XPT2046_Touchscreen.h>
 #include <SD.h>
 
 /*
