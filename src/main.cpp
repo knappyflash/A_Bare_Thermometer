@@ -23,18 +23,17 @@ int SizeOfSplashArray = sizeof(SplashArrayForJosh) / sizeof(SplashArrayForJosh[0
 // For Timers
 unsigned long currentMillis = millis();
 unsigned long previousMillis1000 = 0;
+unsigned long previousMillis15000 = 0;
 unsigned long previousMillis30000 = 0;
 unsigned long previousMillis60000 = 0; 
 unsigned long previousMillis600000 = 0; 
 const long interval1000 = 1000; // 1 seconds
+const long interval15000 = 15000; // 15 seconds
 const long interval30000 = 30000; // 30 seconds
 const long interval60000 = 60000; // 1 minutes
 const long interval600000 = 600000; // 10 minutes
-void Function_Interval_1_Seconds() {    
-}
-void Function_Interval_30_Seconds() {
-}
-void Function_Interval_1_Minute() {
+
+void Main_Do_Stuff(){
 
     int RndImgNum = random(1,45);
     std::string RndImgNumStr = std::to_string(RndImgNum);
@@ -78,11 +77,19 @@ void Function_Interval_1_Minute() {
     // Serial.print("Free heap memory: ");
     // Serial.print(ESP.getFreeHeap());
     // Serial.println(" bytes");
-    
+
 }
 
+void Function_Interval_1_Seconds() {    
+}
+void Function_Interval_15_Seconds() {
+}
+void Function_Interval_30_Seconds() {
+}
+void Function_Interval_1_Minute() {
+    Main_Do_Stuff(); 
+}
 void Function_Interval_10_Minute() {
-
 }
 
 void setup() {
@@ -109,6 +116,11 @@ void loop() {
     if (currentMillis - previousMillis1000 >= interval1000) {
         previousMillis1000 = currentMillis;
         Function_Interval_1_Seconds();
+    }
+    // Every 30 Seconds
+    if (currentMillis - previousMillis15000 >= interval15000) {
+        previousMillis15000 = currentMillis;
+        Function_Interval_15_Seconds();
     }
     // Every 30 Seconds
     if (currentMillis - previousMillis30000 >= interval30000) {
